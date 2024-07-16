@@ -1,12 +1,14 @@
 import { Suspense } from "react";
 import Loading from "./loading";
 import CabinList from "../_components/CabinList";
+import Filter from "../_components/Filter";
 
 export const metadata = {
   title: "Cabins",
 };
-export const revalidate = 3600; //seconds
-export default function Page() {
+export const revalidate = 0; //seconds
+export default function Page({ searchParams }) {
+  const filter = searchParams?.capacity ?? "all";
   return (
     <div>
       <h1 className="text-4xl mb-5 text-accent-400 font-medium">
@@ -20,8 +22,11 @@ export default function Page() {
         away from home. The perfect spot for a peaceful, calm vacation. Welcome
         to paradise.
       </p>
-      <Suspense fallback={<Loading />}>
-        <CabinList />
+      <div className="flex justify-end mb-8">
+        <Filter />
+      </div>
+      <Suspense fallback={<Loading key={filter} />}>
+        <CabinList filter={filter} />
       </Suspense>
     </div>
   );
